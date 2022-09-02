@@ -14,6 +14,8 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class PersonneServiceImpl implements PersonneService{
 
@@ -26,11 +28,11 @@ public class PersonneServiceImpl implements PersonneService{
     public AppResponse<List<PersonneDto>> getAllPersonnes() {
     List<PersonneDto> listPersonnesDto= ObjectMapperUtils.mapAll(personneRepository.findAllByOrderByPrenomAsc(),PersonneDto.class);
 
-        listPersonnesDto.stream().map(personne->{
+        List<PersonneDto> listPersonResponse= listPersonnesDto.stream().map(personne->{
             personne.setAge(getPersonneAge(personne.getDatDeNaissance().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
        return personne;
-        });
-      return new AppResponse(HttpStatus.OK.value()  ,"Liste de personnes", listPersonnesDto);
+        }).collect(Collectors.toList());
+      return new AppResponse<List<PersonneDto>>(HttpStatus.OK.value()  ,"Liste de personnes", listPersonResponse);
     }
 
     @Override

@@ -26,5 +26,9 @@ public class PersonneController {
     public AppResponse<PersonneDto> savePersonne(@RequestBody Personne personne){
        return personneService.savePersonne(personne);
 }
+@GetMapping("sayhello")
+    public  String sayHello(){
+       return  "Hello";
+}
 
 }
